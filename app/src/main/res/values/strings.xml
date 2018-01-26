@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">BlackCat</string>
+    <string name="app_name">黑猫直播</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="login">登陆</string>
 </resources>
