@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.StartActivity"
             android:label="@string/app_name"
@@ -37,6 +37,14 @@
             android:windowSoftInputMode="adjustPan"
             />
         <activity android:name=".activity.base.user.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            />
+        <activity android:name=".activity.base.user.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            />
+        <activity android:name=".activity.base.user.EditUserInfoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             />

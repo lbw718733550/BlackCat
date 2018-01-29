@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#57556d</color>
-    <color name="colorPrimaryDark">#A79CC9</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryDark">#57556d</color>
+    <color name="colorAccent">#57556d</color>FF4081
 
 
+    <color name="select">#A79CC9</color>
     <color name="white">#ffffff</color>
 
     <color name="hint">#aaaaaa</color>
+    <color name="line">#dddddd</color>
+
+    <color name="transparency">#00000000</color>
 </resources>

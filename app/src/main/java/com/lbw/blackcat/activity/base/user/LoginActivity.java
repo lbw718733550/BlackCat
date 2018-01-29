@@ -16,12 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * @autor lbw
- * @time 2018/1/26 14:01
- * @desc 登陆
- */
-
 public class LoginActivity extends BaseActivity {
     @BindView(R.id.login)
     Button login;
@@ -36,7 +30,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public int setContentViewId() {
-        CommonUtils.hiddenState(this);
+//        CommonUtils.hiddenState(this);
         return R.layout.cat_activity_login;
     }
 
@@ -52,19 +46,26 @@ public class LoginActivity extends BaseActivity {
             case R.id.login:
                 if(examine()){
                     baseStartActivity(instance, MainActivity.class);
+                    baseFinish();
                 }
                 break;
             case R.id.regist:
+                baseStartActivity(instance, RegisterActivity.class);
                 break;
             case R.id.forget_pwd:
                 break;
         }
     }
 
+    /**
+     * @desc 检测账号密码输入
+     * @another lbw
+     * @time 2018/1/29 10:32
+     */
     private boolean examine() {
         if (TextUtils.isEmpty(etUsername.getText().toString()) ||
                 TextUtils.isEmpty(etPassword.getText().toString()))
-            return false;
+            return true;
         return true;
     }
 }

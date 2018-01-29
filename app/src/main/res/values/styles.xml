@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- 隐藏系统标题栏 -->
+        <item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -27,9 +29,26 @@
     </style>
 
     <!-- editext 下划线 -->
+    <style name="MyEditText3" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+    <!-- editext 下划线 -->
     <style name="MyEditText" parent="Theme.AppCompat.Light">
-        <item name="colorControlNormal">@android:color/white</item>
-        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+    </style>
+    <!-- editext 下划线 -->
+    <style name="MyEditText2" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/transparency</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <!-- 横线 -->
+    <style name="line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/line</item>
     </style>
 
 </resources>
