@@ -5,7 +5,7 @@ import android.os.Handler;
 
 import com.lbw.blackcat.R;
 import com.lbw.blackcat.activity.base.BaseActivity;
-import com.lbw.blackcat.activity.base.user.LoginActivity;
+import com.lbw.blackcat.activity.user.LoginActivity;
 
 /**
  * @autor lbw

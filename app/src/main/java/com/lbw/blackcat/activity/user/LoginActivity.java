@@ -1,4 +1,4 @@
-package com.lbw.blackcat.activity.base.user;
+package com.lbw.blackcat.activity.user;
 
 import android.os.Bundle;
 import android.support.constraint.Guideline;
@@ -10,10 +10,11 @@ import android.widget.EditText;
 import com.lbw.blackcat.R;
 import com.lbw.blackcat.activity.MainActivity;
 import com.lbw.blackcat.activity.base.BaseActivity;
+import com.lbw.blackcat.live.IliveManage;
 import com.lbw.blackcat.utils.CommonUtils;
+import com.lbw.blackcat.utils.ToastUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity {
@@ -30,13 +31,14 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public int setContentViewId() {
-//        CommonUtils.hiddenState(this);
+        CommonUtils.hiddenState(this);
         return R.layout.cat_activity_login;
     }
 
     @Override
     public void init(Bundle savedInstanceState) {
-
+        etUsername.setText("lbw6");
+        etPassword.setText("cx15259851275");
     }
 
 
@@ -45,8 +47,18 @@ public class LoginActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.login:
                 if(examine()){
-                    baseStartActivity(instance, MainActivity.class);
-                    baseFinish();
+                    IliveManage.getInstance().Login(etUsername.getText().toString(), etPassword.getText().toString(), new IliveManage.CallBack() {
+                        @Override
+                        public void onError(String module, int errCode, String errMsg) {
+                            ToastUtil.showError(LoginActivity.this, "登录失败！");
+                        }
+                        @Override
+                        public void onSuccess(Object data) {
+                            ToastUtil.showSuccess(LoginActivity.this, "登录成功！");
+                            baseStartActivity(instance, MainActivity.class);
+                            baseFinish();
+                        }
+                    });
                 }
                 break;
             case R.id.regist:
@@ -65,7 +77,7 @@ public class LoginActivity extends BaseActivity {
     private boolean examine() {
         if (TextUtils.isEmpty(etUsername.getText().toString()) ||
                 TextUtils.isEmpty(etPassword.getText().toString()))
-            return true;
+            return false;
         return true;
     }
 }

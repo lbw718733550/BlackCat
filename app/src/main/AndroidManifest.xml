@@ -13,8 +13,11 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 允许程序读写手机状态和身份 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:name=".BlackCatApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -36,18 +39,28 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             />
-        <activity android:name=".activity.base.user.LoginActivity"
+        <activity android:name=".activity.user.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             />
-        <activity android:name=".activity.base.user.RegisterActivity"
+        <activity android:name=".activity.user.RegisterActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             />
-        <activity android:name=".activity.base.user.EditUserInfoActivity"
+        <activity android:name=".activity.user.EditUserInfoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             />
+
+
+
+        <!-- 图片选择器PhotoPicker -->
+        <activity android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            />
+
+        <activity android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
     </application>
 
 </manifest>

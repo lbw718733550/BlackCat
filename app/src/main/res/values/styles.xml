@@ -51,4 +51,19 @@
         <item name="android:background">@color/line</item>
     </style>
 
+
+
+
+    <!-- 图片选择器PhotoPicker -->
+    <style name="actionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@android:color/primary_text_light</item>
+        <item name="actionBarSize">?actionBarSize</item>
+    </style>
+
+    <style name="customTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="actionBarTheme">@style/actionBarTheme</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="actionBarSize">?actionBarSize</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+    </style>
 </resources>

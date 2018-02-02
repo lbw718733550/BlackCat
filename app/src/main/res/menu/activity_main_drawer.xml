@@ -5,13 +5,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_livelist"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="直播" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_imagelist"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="图片" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
