@@ -1,8 +1,13 @@
 package com.lbw.blackcat.activity;
 
-import android.animation.ObjectAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
+import android.graphics.PointF;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,20 +17,23 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
+import android.view.ViewAnimationUtils;
 import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 
 import com.lbw.blackcat.R;
 import com.lbw.blackcat.activity.base.BaseActivity;
 import com.lbw.blackcat.activity.fragment.ImageListFragment;
 import com.lbw.blackcat.activity.fragment.LiveListFragment;
+import com.lbw.blackcat.utils.CommonUtils;
+import com.lbw.blackcat.utils.MoveEvalutor;
 import com.lbw.blackcat.widget.MyActionBarDrawerToggle;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity
@@ -39,9 +47,30 @@ public class MainActivity extends BaseActivity
     NavigationView navigationView;
     @BindView(R.id.main_context)
     ConstraintLayout mainContext;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.main_function)
+    ConstraintLayout mainFunction;
+    @BindView(R.id.function_back)
+    ImageView functionBack;
+    @BindView(R.id.function_fab_live)
+    FloatingActionButton functionFabLive;
+    @BindView(R.id.function_fab_vedio)
+    FloatingActionButton functionFabVedio;
+    @BindView(R.id.function_fab_iamge)
+    FloatingActionButton functionFabIamge;
 
     private List<Fragment> fragments = new ArrayList<>();
-    private FragmentManager fragmentManager ;
+    private FragmentManager fragmentManager;
+
+    /**
+     * 功能点击展开动画
+     */
+    private PointF startPoint = null;//原点坐标就是view的所在
+    private PointF flagPoint = null;//点p1
+    private PointF endPoint = null;//点p2
+    private List<View> functionViews ;
+    private boolean functionState = false;
 
     @Override
     public int setContentViewId() {
@@ -70,7 +99,7 @@ public class MainActivity extends BaseActivity
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         for (Fragment fragment : fragments) {
-            transaction.add( R.id.fragmetn_content, fragment);
+            transaction.add(R.id.fragmetn_content, fragment);
         }
         showDetal(0);
         /**设置MenuItem默认选中项**/
@@ -151,21 +180,161 @@ public class MainActivity extends BaseActivity
     }
 
 
-    @OnClick({R.id.fab})
+    @OnClick({R.id.fab,R.id.function_back, R.id.function_fab_live, R.id.function_fab_vedio, R.id.function_fab_iamge})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fab:
-                startAnim();
+                initFunctionAnim();
+                onOffAnim(fab);
+                startBezierAnim(view, flagPoint, startPoint, endPoint);
+                break;
+            case R.id.function_back:
+                functionFabBtnAnim();
+                break;
+            case R.id.function_fab_live:
+                break;
+            case R.id.function_fab_vedio:
+                break;
+            case R.id.function_fab_iamge:
                 break;
         }
     }
 
     /**
-     * @desc fab 动画
+     * @desc 初始化 动画相关
      * @another lbw
-     * @time 2018/2/2 17:18
+     * @time 2018/2/8 15:37
      */
-    private void startAnim() {
+    private void initFunctionAnim()
+    {
+        if (null == startPoint) {
+            endPoint = new PointF(fab.getX(), fab.getY());
+            flagPoint = new PointF(CommonUtils.getScreenMetrics().x / 3f * 2, CommonUtils.getScreenMetrics().y / 3f * 2);
+            startPoint = new PointF(CommonUtils.getScreenMetrics().x / 2f - fab.getWidth() / 2, CommonUtils.getScreenMetrics().y / 2f - fab.getHeight() / 2);
+
+            functionViews = new ArrayList<>();
+            functionViews.add(functionBack);
+            functionViews.add(functionFabIamge);
+            functionViews.add(functionFabLive);
+            functionViews.add(functionFabVedio);
+        }
     }
+
+    /**
+     * @desc 动画 开关
+     * @another lbw
+     * @time 2018/2/8 11:21
+     */
+    private void onOffAnim(View view) {
+        if (functionState) {
+            PointF t = startPoint;
+            startPoint = endPoint;
+            endPoint = t;
+            flagPoint = new PointF(startPoint.x, endPoint.y );
+
+        }else {
+            PointF t = endPoint;
+            endPoint = startPoint;
+            startPoint = t;
+            flagPoint = new PointF(endPoint.x, startPoint.y );
+        }
+    }
+
+
+    /**
+     * @desc 贝塞尔曲线动画
+     * @another lbw
+     * @time 2018/2/8 10:46
+     */
+    private void startBezierAnim(final View view, PointF flagPoint, final PointF startPoint, final PointF endPoint) {
+
+        ValueAnimator mValueAnimator = ValueAnimator.ofObject(new MoveEvalutor(flagPoint),
+                startPoint, endPoint);
+        mValueAnimator.setDuration(200);
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                PointF point = (PointF) animation.getAnimatedValue();
+                view.setX(point.x);
+                view.setY(point.y);
+                //移动到结束点的时候开启扩大动画
+                if (endPoint.x == point.x && endPoint.y == point.y) {
+                    if (functionState) {
+                        functionState = false;
+                    }else {
+                        fab.setVisibility(View.GONE);
+                        startScaleAnim();
+                    }
+                }
+            }
+        });
+        mValueAnimator.start();
+
+    }
+
+    /**
+     * @desc 背景扩大的动画
+     * @another lbw
+     * @time 2018/2/8 13:53
+     */
+    private void startScaleAnim() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            int centerX = CommonUtils.getScreenMetrics().x / 2;
+            int centerY = CommonUtils.getScreenMetrics().y / 2;
+            float startRadius = 0;
+            float finalRadius = 0;
+            if (functionState) {
+                finalRadius = 0;
+                startRadius = (float) Math.hypot((double) centerX, (double) centerY);
+            }else {
+                startRadius = 0;
+                finalRadius = (float) Math.hypot((double) centerX, (double) centerY);
+            }
+            if (functionState) {
+            }else {
+                mainFunction.setVisibility(View.VISIBLE);
+            }
+            Animator mCircularReveal = ViewAnimationUtils.createCircularReveal(mainFunction, centerX, centerY, startRadius, finalRadius);
+            // 设置动画持续时间，并开始动画
+            mCircularReveal.setDuration(200).start();
+            mCircularReveal.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    if (!functionState) {
+                        functionFabBtnAnim();
+                    }else {
+                        onOffAnim(fab);
+                        fab.setVisibility(View.VISIBLE);
+                        startBezierAnim(fab,flagPoint,startPoint,endPoint);
+                        mainFunction.setVisibility(View.GONE);
+                    }
+                }
+            });
+        } else {
+
+        }
+    }
+
+    /**
+     * @desc 功能fab的显示隐藏动画
+     * @another lbw
+     * @time 2018/2/8 15:41
+     */
+    private void functionFabBtnAnim() {
+        if (functionState) {
+            for (View view : functionViews) {
+                view.setVisibility(View.GONE);
+            }
+            startScaleAnim();
+        }else {
+            for (View functionView : functionViews) {
+                functionView.setVisibility(View.VISIBLE);
+            }
+            functionState = true;
+        }
+    }
+
 
 }
